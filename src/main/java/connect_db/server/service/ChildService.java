@@ -1,10 +1,13 @@
 package connect_db.server.service;
 
 import connect_db.server.models.Child;
+import connect_db.server.models.Parent;
 import connect_db.server.repository.ChildRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class ChildService {
@@ -18,6 +21,9 @@ public class ChildService {
     @Autowired
     JdbcTemplate jdbcTemplate;
 
+    public List<Child> findAll(){
+        return childRepository.findAll();
+    }
     public String findByID (Long id){
         return childRepository.findById(id).toString();
     }
@@ -28,5 +34,10 @@ public class ChildService {
     }
     public Child saveChild(Child child){
         return childRepository.save(child);
+    }
+
+    public String update (String latitude, String longitude, Long id) {
+        String sql = "UPDATE CHILD SET latitude=?, longitude=? WHERE id=?";
+        return jdbcTemplate.queryForObject(sql, String.class, latitude, longitude, id);
     }
 }

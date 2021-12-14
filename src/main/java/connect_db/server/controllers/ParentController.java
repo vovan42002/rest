@@ -39,7 +39,8 @@ public class ParentController {
 
     // проверка на существование пользователя по емайл и паролю
     @GetMapping("checkParent")
-    public boolean checkParent(@RequestParam(name = "email") String email, @RequestParam(name = "password") String password) {
+    public boolean checkParent(@RequestParam(name = "email") String email,
+                               @RequestParam(name = "password") String password) {
         System.out.println("result: " + parentService.checkParent(email, password));
         if (parentService.checkParent(email, password).hashCode() == "1".hashCode()) {
             return true;
@@ -75,9 +76,29 @@ public class ParentController {
         return false;
     }
     @PostMapping("/testAdd")
-    public Child test(@RequestParam(name = "idParent") Long idParent, @RequestParam(name = "name") String name,
-                      @RequestParam(name = "latitude") String latitude, @RequestParam(name = "longitude") String longitude){
+    public Child test(@RequestParam(name = "idParent") Long idParent,
+                      @RequestParam(name = "name") String name,
+                      @RequestParam(name = "latitude") String latitude,
+                      @RequestParam(name = "longitude") String longitude){
         Parent p = parentService.getParentById(idParent);
         return childService.saveChild(parentService.create(name,latitude,longitude,p));
+    }
+
+    @GetMapping("/listChilds")
+    public String listChild(@RequestParam(name = "idParent") Long idParent){
+        System.out.println(parentService.childList(idParent));
+        return parentService.childList(idParent);
+    }
+
+    @GetMapping("/getParentId")
+    public Long getParentId (@RequestParam(name = "email") String email,
+                             @RequestParam(name = "password") String password){
+        return Long.valueOf(Integer.parseInt(parentService.getParentIdByEmailAndPassword(email,password)));
+    }
+
+    @GetMapping("/checkExistChild")
+    public boolean checkExistChild(@RequestParam(name = "name") String name,
+                                   @RequestParam(name = "idParent") Long idParent){
+        return  parentService.checkExistChild(idParent,name);
     }
 }

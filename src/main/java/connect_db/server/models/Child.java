@@ -1,5 +1,7 @@
 package connect_db.server.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -21,6 +23,7 @@ public class Child implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "parent_id")
+    @JsonBackReference
     private Parent parent;
 
     public Child (){}
@@ -71,6 +74,16 @@ public class Child implements Serializable {
         this.parent = parent;
     }
 
+    @Override
+    public String toString() {
+        return "Child{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", latitude='" + latitude + '\'' +
+                ", longitude='" + longitude + '\'' +
+                ", parent=" + parent +
+                '}';
+    }
 }
 
 

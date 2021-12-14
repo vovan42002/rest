@@ -1,5 +1,7 @@
 package connect_db.server.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
@@ -21,6 +23,7 @@ import java.util.List;
     private String email;
 
     @OneToMany(mappedBy = "parent",cascade = CascadeType.REMOVE)
+    @JsonManagedReference
     private List<Child> childList;
 
     public Parent() {
@@ -70,5 +73,15 @@ import java.util.List;
 
     public void setChildList(List<Child> childList) {
         this.childList = childList;
+    }
+
+    @Override
+    public String toString() {
+        return "Parent{" +
+                "id=" + id +
+                ", nickname='" + nickname + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                "}";
     }
 }
