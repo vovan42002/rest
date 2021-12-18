@@ -2,6 +2,7 @@ package connect_db.server.controllers;
 
 import connect_db.server.models.Child;
 import connect_db.server.service.ChildService;
+import connect_db.server.service.ParentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,9 +15,14 @@ public class ChildController {
     private final ChildService childService;
 
     @Autowired
-    public ChildController(ChildService childService){
+    public ChildController(ChildService childService, ParentService parentService){
         this.childService = childService;
+        this.parentService = parentService;
     }
+
+    @Autowired
+    private final ParentService parentService;
+
 
     @GetMapping("/findById")
     public String findChildById(@RequestParam(name = "id") Long id){
@@ -38,5 +44,31 @@ public class ChildController {
                          @RequestParam(name = "longitude") String longitude,
                          @RequestParam(name = "id") Long id){
         return childService.update(latitude,longitude,id);
+    }
+
+    @PostMapping("/add")
+    public Child add (@RequestBody Child child, @RequestParam("parent_id") Long parent_id){
+        child.setParent(parentService.getParentById(parent_id));
+        return childService.saveChild(child);
+    }
+
+    @GetMapping("/getChildId")
+    public Long getChildId(@RequestParam(name = "idParent") Long idParent, @RequestParam(name = "name") String name){
+        return childService.getChildId(idParent,name);
+    }
+
+    @GetMapping("/getGeo")
+    public String getGeo (@RequestParam(name = "idChild") Long idChild) {
+        return childService.getGeoChild(idChild);
+    }
+
+    @PutMapping("/updateLocation")
+    public String updateLocation (@RequestParam(name = "location") String location,
+                                  @RequestParam("idChild") Long idChild){
+        return childService.location(location,idChild);
+    }
+    @GetMapping("/getLocation")
+    public String getLocation(@RequestParam(name = "idChild") Long idChild){
+        return childService.getLocation(idChild);
     }
 }

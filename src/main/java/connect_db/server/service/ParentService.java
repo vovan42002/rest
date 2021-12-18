@@ -5,14 +5,9 @@ import connect_db.server.models.Parent;
 import connect_db.server.repository.ChildRepository;
 import connect_db.server.repository.Parentrepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Service;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 
 
@@ -38,24 +33,6 @@ public class ParentService {
 
     public boolean existById(Long id) {
         return parentrepository.existsById(id);
-    }
-
-    public Long findOne(String nick, String email, String pass) {
-        Parent parent = new Parent();
-        List<Parent> list = parentrepository.findAll();
-        boolean is = false;
-        int i = 0;
-        Long id = Long.valueOf(-1);
-        while (is != true) {
-            parent = list.get(i);
-            if (parent.getEmail().hashCode() == email.hashCode()
-                    && parent.getNickname().hashCode() == nick.hashCode()
-                    && parent.getPassword().hashCode() == pass.hashCode()) {
-                id = parent.getId();
-                is = true;
-            }
-        }
-        return id;
     }
 
     public String getParentIdByEmailAndPassword(String email, String password) {
@@ -103,6 +80,8 @@ public class ParentService {
         return childRepository.save(child);
     }
 
+
+
     public String childList(Long idParent) {
         String sql = "SELECT name FROM child WHERE parent_id=?";
         List<String> childs = jdbcTemplate.queryForList(sql, String.class, idParent);
@@ -110,7 +89,7 @@ public class ParentService {
             return null;
         else {
             StringBuilder sb = new StringBuilder();
-            System.out.println("LENGTH: " + childs.size());
+           // System.out.println("LENGTH: " + childs.size());
             for (int i = 0; i < childs.size(); i++) {
                 sb.append(childs.get(i)).append("\n");
             }
@@ -125,5 +104,4 @@ public class ParentService {
         } else
             return false;
     }
-
 }

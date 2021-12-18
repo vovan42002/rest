@@ -41,7 +41,7 @@ public class ParentController {
     @GetMapping("checkParent")
     public boolean checkParent(@RequestParam(name = "email") String email,
                                @RequestParam(name = "password") String password) {
-        System.out.println("result: " + parentService.checkParent(email, password));
+        //System.out.println("result: " + parentService.checkParent(email, password));
         if (parentService.checkParent(email, password).hashCode() == "1".hashCode()) {
             return true;
         } else
@@ -86,7 +86,7 @@ public class ParentController {
 
     @GetMapping("/listChilds")
     public String listChild(@RequestParam(name = "idParent") Long idParent){
-        System.out.println(parentService.childList(idParent));
+        //System.out.println(parentService.childList(idParent));
         return parentService.childList(idParent);
     }
 
@@ -100,5 +100,10 @@ public class ParentController {
     public boolean checkExistChild(@RequestParam(name = "name") String name,
                                    @RequestParam(name = "idParent") Long idParent){
         return  parentService.checkExistChild(idParent,name);
+    }
+
+    @PostMapping("/addChild")
+    public Child add (@RequestBody Child child){
+        return childService.saveChild(child);
     }
 }

@@ -1,15 +1,17 @@
 package connect_db.server.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table
 public class Child implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Column(name = "name")
@@ -21,10 +23,18 @@ public class Child implements Serializable {
     @Column(name = "longitude")
     private String longitude;
 
+    @Column(name = "location")
+    private String location;
+
     @ManyToOne
     @JoinColumn(name = "parent_id")
     @JsonBackReference
     private Parent parent;
+
+    @OneToMany(mappedBy = "child", cascade= CascadeType.ALL, orphanRemoval=true)
+    @JsonManagedReference
+    private List<App> apps;
+
 
     public Child (){}
 
@@ -32,6 +42,14 @@ public class Child implements Serializable {
         this.name = name;
         this.latitude = latitude;
         this.longitude = longitude;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     public Long getId() {
@@ -74,6 +92,14 @@ public class Child implements Serializable {
         this.parent = parent;
     }
 
+    public List<App> getApps() {
+        return apps;
+    }
+
+    public void setApps(List<App> apps) {
+        this.apps = apps;
+    }
+
     @Override
     public String toString() {
         return "Child{" +
@@ -84,6 +110,7 @@ public class Child implements Serializable {
                 ", parent=" + parent +
                 '}';
     }
+
 }
 
 
