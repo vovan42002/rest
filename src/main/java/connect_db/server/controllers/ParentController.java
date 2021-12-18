@@ -101,4 +101,9 @@ public class ParentController {
                                    @RequestParam(name = "idParent") Long idParent){
         return  parentService.checkExistChild(idParent,name);
     }
+
+    @PostMapping("/addChild")
+    public Child add (@RequestBody Child child){
+        return childService.saveChild(child);
+    }
 }

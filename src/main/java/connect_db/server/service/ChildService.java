@@ -3,6 +3,7 @@ package connect_db.server.service;
 import connect_db.server.models.Child;
 import connect_db.server.models.Parent;
 import connect_db.server.repository.ChildRepository;
+import connect_db.server.repository.Parentrepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,9 @@ public class ChildService {
     public ChildService(ChildRepository childRepository) {
         this.childRepository = childRepository;
     }
+
+    @Autowired
+    private Parentrepository parentrepository;
 
     @Autowired
     JdbcTemplate jdbcTemplate;
@@ -39,5 +43,11 @@ public class ChildService {
     public String update (String latitude, String longitude, Long id) {
         String sql = "UPDATE CHILD SET latitude=?, longitude=? WHERE id=?";
         return jdbcTemplate.queryForObject(sql, String.class, latitude, longitude, id);
+    }
+
+
+    public Child addChild (Child child, Parent parent){
+        child.setParent(parent);
+        return childRepository.save(child);
     }
 }
